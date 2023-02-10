@@ -16,7 +16,8 @@ import redis.clients.jedis.JedisPool;
 public class MainMethod {
 
   //api instance of mysql database
-  private static TweetDatabaseAPI api = new TweetDatabaseRedis();
+  //private static TweetDatabaseAPI api = new TweetDatabaseRedis();
+  private static TweetDatabaseAPI api = new TweetRedisT();
 
   public static void main(String[] args) throws FileNotFoundException {
 
@@ -33,12 +34,12 @@ public class MainMethod {
     String filePathTweets = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/tweet.csv";
     String filePathFollows = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/follows.csv";
 
-    api.trackTweetsPerSecond(api.readCsvTweet(filePathTweets));
+    //api.trackTweetsPerSecond(api.readCsvTweet(filePathTweets));
+
     //api.readCsvFollows(filePathFollows);
     //api.readCsvTweet(filePathTweets);
 
-
-    //api.getFollowers("6");
+    //api.getFollowers("1");
 
 //    // Generates a list of tweets from the tweet csv (filepath above) and stores it so that
 //    // it may be passed to the trackTweetsPerSecond method call
@@ -51,11 +52,13 @@ public class MainMethod {
 //    // it may be passed to the trackTimelinesPerSecond method call
 //    List<Follows> follows = api.readCsvFollows(filePathFollows);
 //
-//    // generates and stores a random user from the set of user_ids found in the follows csv
-//    int randomUser = api.pickRandomUser(follows);
-//
-//    // tracks the number of timelines retrieved from the database per second
-//    api.trackTimelinesPerSecond(randomUser);
+    // generates and stores a random user from the set of user_ids found in the follows csv
+    int randomUser = api.pickRandomUser(api.readCsvFollows(filePathFollows));
+
+    api.getTimeline(randomUser);
+
+    // tracks the number of timelines retrieved from the database per second
+    //api.trackTimelinesPerSecond(randomUser);
 //
 //    //sets the user connections settings
 //    api.authenticate(url, user, password);

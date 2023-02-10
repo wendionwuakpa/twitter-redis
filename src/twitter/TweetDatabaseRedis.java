@@ -162,7 +162,7 @@ public class TweetDatabaseRedis implements TweetDatabaseAPI {
   List<Follows> follows = new ArrayList<>();
 
   /**
-   * Reads follows csv and
+   * Reads follows csv and returns list of Follows
    *
    * @param filePath the filepath of the given follows csv
    * @return
@@ -321,8 +321,11 @@ public class TweetDatabaseRedis implements TweetDatabaseAPI {
    * @return
    */
   public List<Tweet> getTimeline(Integer randomUserId) {
-    //fetch timelines from posttweet method of a radnom user
-    return null;
+    //fetch timelines from posttweet method of a random user
+
+    //list of tweets to store the timeline
+    List<Tweet> timeline = new ArrayList<Tweet>();
+    return timeline;
   }
 
   /**
