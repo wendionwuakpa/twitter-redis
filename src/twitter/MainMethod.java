@@ -31,9 +31,14 @@ public class MainMethod {
 //
     //file paths to .csv files
     String filePathTweets = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/tweet.csv";
-    String filePathFollows = "/Users/pratheek_mandalapu/Downloads/hw1_data/follows.csv";
+    String filePathFollows = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/follows.csv";
 
     api.trackTweetsPerSecond(api.readCsvTweet(filePathTweets));
+    //api.readCsvFollows(filePathFollows);
+    //api.readCsvTweet(filePathTweets);
+
+
+    //api.getFollowers("6");
 
 //    // Generates a list of tweets from the tweet csv (filepath above) and stores it so that
 //    // it may be passed to the trackTweetsPerSecond method call

@@ -170,7 +170,7 @@ public class TweetDatabaseMySQL implements TweetDatabaseAPI {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return follows;
+    return null;
   }
 
   /**
@@ -263,6 +263,16 @@ public class TweetDatabaseMySQL implements TweetDatabaseAPI {
     }
     return timeline;
   }
+
+  @Override
+  public List<String> getFollowers(String user_id) {
+    return null;
+  }
+
+//  @Override
+//  public List<String> getFollowers(String user_id) {
+//    return null;
+//  }
 
 ////////////////////// UNUSED METHODS THAT MAY BE USED IN FUTURE IMPLEMENTATIONS //////////////
 

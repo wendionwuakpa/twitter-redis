@@ -78,7 +78,7 @@ public interface TweetDatabaseAPI {
    * @param user_id twitter user to find followers
    * @return
    */
-  List<Integer> getFollowers(Integer user_id); // who is following user_id
+  List<String> getFollowers(String user_id); // who is following user_id
 
   /**
    * returns all the followees of user_id

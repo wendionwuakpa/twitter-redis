@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/hw 1 - twitter.iml" filepath="$PROJECT_DIR$/hw 1 - twitter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hw2TwitterRedis.iml" filepath="$PROJECT_DIR$/hw2TwitterRedis.iml" />
     </modules>
   </component>
 </project>
