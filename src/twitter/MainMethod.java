@@ -15,50 +15,41 @@ import redis.clients.jedis.JedisPool;
  */
 public class MainMethod {
 
-  //api instance of mysql database
+  //api instance of Redis database
   //private static TweetDatabaseAPI api = new TweetDatabaseRedis();
   private static TweetDatabaseAPI api = new TweetRedisT();
 
   public static void main(String[] args) throws FileNotFoundException {
 
-
-//    // Authenticate access to database server
+    // Authenticate access to database server
       String url = "jdbc:mysql://localhost:3306/twitter";
 
-//
-//    // Environment variables
-//    String user = System.getenv("TWITTER_USER");
-//    String password = System.getenv("TWITTER_PASSWORD");
+    // Environment variables for SQL implementatoin
+    String user = System.getenv("TWITTER_USER");
+    String password = System.getenv("TWITTER_PASSWORD");
 //
     //file paths to .csv files
     String filePathTweets = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/tweet.csv";
     String filePathFollows = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/follows.csv";
 
-    //api.trackTweetsPerSecond(api.readCsvTweet(filePathTweets));
+    // Generates a list of tweets from the tweet csv (filepath above) and stores it so that
+    // it may be passed to the trackTweetsPerSecond method call
+    List<Tweet> tweets = api.readCsvTweet(filePathTweets);
 
-    //api.readCsvFollows(filePathFollows);
-    //api.readCsvTweet(filePathTweets);
+    // tracks the number of tweets posted to the database per second
+    api.trackTweetsPerSecond(tweets);
 
-    //api.getFollowers("1");
+    // Generates a list of follows from the follows csv (filepath above) and stores it so that
+    // it may be passed to the trackTimelinesPerSecond method call
+    List<Follows> follows = api.readCsvFollows(filePathFollows);
 
-//    // Generates a list of tweets from the tweet csv (filepath above) and stores it so that
-//    // it may be passed to the trackTweetsPerSecond method call
-//    List<Tweet> tweets = api.readCsvTweet(filePathTweets);
-//
-//    // tracks the number of tweets posted to the database per second
-//    api.trackTweetsPerSecond(tweets);
-//
-//    // Generates a list of follows from the follows csv (filepath above) and stores it so that
-//    // it may be passed to the trackTimelinesPerSecond method call
-//    List<Follows> follows = api.readCsvFollows(filePathFollows);
-//
     // generates and stores a random user from the set of user_ids found in the follows csv
-    int randomUser = api.pickRandomUser(api.readCsvFollows(filePathFollows));
-
-    api.getTimeline(randomUser);
+    int randomUser = api.pickRandomUser(follows);
 
     // tracks the number of timelines retrieved from the database per second
     //api.trackTimelinesPerSecond(randomUser);
+    //api.getTimeline(randomUser);
+
 //
 //    //sets the user connections settings
 //    api.authenticate(url, user, password);

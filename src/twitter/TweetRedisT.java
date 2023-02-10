@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import jdk.swing.interop.SwingInterOpUtils;
 import redis.clients.jedis.Jedis;
 
 public class TweetRedisT implements TweetDatabaseAPI {
@@ -21,13 +20,14 @@ public class TweetRedisT implements TweetDatabaseAPI {
     tweet_db1.set("id", "0");
   }
 
-  //variable used to generate unique ids for each twitter object
-  int unique_tweet_id = 0;
-
   //follows.csv
   String filePathFollows = "/Users/wendionwuakpa/Desktop/Spring 2023/DS4300/hw1_data/follows.csv";
 
   @Override
+  /**
+   * Posts a tweet made by a user to the timelines of the user's followers.
+   * The tweet is stored in Redis using Hash commands, with the key as tweet_id.
+   */
   //posts a tweet to a users timeline
   public void postTweet(Tweet t) {
     //String tweet_id = String.valueOf(this.getUniqueId());
@@ -36,10 +36,14 @@ public class TweetRedisT implements TweetDatabaseAPI {
     String tweet_ts = currentDateTime();
     String tweet_text = t.getTweet_text();
 
+    //lists of followers of a user id
     List<String> followersUser_id = getFollowers(user_id);
 
     try {
+      //posts the tweet to Redis
       postToRedis(tweet_id, user_id, tweet_ts, tweet_text);
+
+      //makes and posts the Timelines to Redis.
       postToTimelines(followersUser_id, tweet_id);
 
       tweet_db1.close();
@@ -73,22 +77,9 @@ public class TweetRedisT implements TweetDatabaseAPI {
       keyName = "Timeline:"+ follower;
       //push the tweet posted to the user's timeline
       tweet_db1.lpush(keyName, tweetPosted_tweetid);
-      timelines = tweet_db1.lrange(keyName, 0, -1);
-      //System.out.println("The timeline is " + keyName + "\n" + timelines);
+      //top 10 most recent tweets on the users timeline.
+      timelines = tweet_db1.lrange(keyName, 0, 9);
     }
-
-  }
-
-  /**
-   * generates a unique integer for a tweet_id by incrementing a counter by 1 each time postTweet is
-   * run
-   *
-   * @return tweet_id
-   */
-  //todo: improve the runtime of getting unique id
-  public int getUniqueId() {
-    unique_tweet_id = unique_tweet_id + 1;
-    return unique_tweet_id;
   }
 
   /**
@@ -206,12 +197,10 @@ public class TweetRedisT implements TweetDatabaseAPI {
       if(user_id_int == f.getFollows_id()) {
         // find follower of user_id
         String follower_user_id = String.valueOf(f.getUser_id());
-//        System.out.println("The follower added is " + follower_user_id);
         tweet_db1.lpush(keyname, follower_user_id);
       }
     }
     followers = tweet_db1.lrange(keyname, 0, -1);
-    //System.out.println("The followers of " + user_id + " is " + followers);
     return followers;
   }
   /**
@@ -264,26 +253,20 @@ public class TweetRedisT implements TweetDatabaseAPI {
     //get timelines of tweet_id from posttoTimeline function call
     List<String> timelinesTweet_id = new ArrayList<String>();
 
-    //key to pass to lrange
-    String s_randomUserId = String.valueOf(randomUserId);
-    //String s_randomUserId = "Timeline:" + String.valueOf(randomUserId);
+    //key to pass to lranget
+    String s = String.valueOf(randomUserId);
+    String s_randomUserId = "Timeline:" + s;
     timelinesTweet_id = tweet_db1.lrange(s_randomUserId, 0, 9);
-    System.out.println(timelinesTweet_id);
 
     //Iterate through list of tweet_ids and find user_id and tweet_text
     for(String tweet_id : timelinesTweet_id) {
       String user_id = tweet_db1.hget(tweet_id, "user_id");
       String tweet_text = tweet_db1.hget(tweet_id, "tweet_text");
-      System.out.println("User of " + tweet_id + " " + user_id);
-      System.out.println(tweet_text);
       Tweet tweetPosted = new Tweet(Integer.parseInt(user_id), tweet_text);
       timeline.add(tweetPosted);
     }
-    System.out.println(timeline);
     return timeline;
   }
-
-
 
   @Override
   public List<Integer> getFollowees(Integer user_id) {
